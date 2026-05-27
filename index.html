@@ -93,7 +93,7 @@
           <select id="f-exp"><option value="">Seleccionar</option><option>Menos de 2 años</option><option>2 – 4 años</option><option>5 – 7 años</option><option>8 – 10 años</option><option>Más de 10 años</option></select>
         </div>
       </div>
-      <div class="info-box"><strong>Condiciones del test</strong><br>10 preguntas · 20 minutos · Selección múltiple<br>Los cambios de pestaña quedan registrados y serán visibles en tu reporte.</div>
+      <div class="info-box"><strong>Condiciones del test</strong><br>10 preguntas · 10 minutos · Selección múltiple<br>Los cambios de pestaña quedan registrados y serán visibles en tu reporte.</div>
       <button class="btn primary" id="btn-start" style="width:100%;padding:12px">Comenzar evaluación →</button>
     </div>
   </div>
@@ -154,7 +154,7 @@
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxwptEfGbs8kRLqWP4DmMXQ_0sww_yKOjDSzjvAj8pQgFFWetM13phSMaPh8DerFAuk/exec';
 // ─────────────────────────────────────────────────────────────────
 
-const TOTAL_SECONDS = 20 * 60;
+const TOTAL_SECONDS = 10 * 60;
 const questions = [
   { cat:"Redes", color:"#185FA5", bg:"#E6F1FB", q:"Un servidor de producción responde en 800ms cuando debería hacerlo en 80ms. ¿Por dónde empiezas a diagnosticar?", opts:["Reinicio el servidor para ver si el problema persiste.","Reviso latencia de red con traceroute/ping, descarto saturación de NIC y reviso métricas de CPU/memoria antes de ir a la app.","Abro un ticket al proveedor de internet directamente.","Migro el servicio a otro servidor como medida inmediata."], answer:1 },
   { cat:"Alta disponibilidad", color:"#0F6E56", bg:"#E1F5EE", q:"Te piden diseñar una arquitectura que soporte caída de un datacenter completo con RTO < 15 min. ¿Qué estrategia propones?", opts:["Backup diario en cinta con restauración manual.","Active-Active en dos DCs con balanceador global y replicación síncrona de datos críticos.","Cluster de failover en el mismo DC con IP flotante.","Aumentar los recursos del servidor principal para reducir el riesgo de caída."], answer:1 },
