@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluación Técnica — Analista Sr. de Infraestructura</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f9f9f8; --surface: #ffffff; --border: #e5e4e0; --border-hover: #c8c7c2;
+    --text: #1a1a19; --text-muted: #6b6b68; --text-hint: #9e9e9b;
+    --purple: #534AB7; --purple-light: #EEEDFE; --purple-dark: #3C3489;
+    --green: #0F6E56; --green-light: #E1F5EE;
+    --red: #993C1D; --red-light: #FAECE7;
+    --amber: #BA7517; --amber-light: #FAEEDA;
+    --radius: 10px; --radius-sm: 6px;
+  }
+  body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem 4rem; }
+  .container { width: 100%; max-width: 640px; }
+  .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 2rem; }
+  .brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--purple); }
+  .brand-name { font-size: 13px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.04em; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; margin-bottom: 1rem; }
+  .card h2 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+  .card p { font-size: 14px; color: var(--text-muted); line-height: 1.65; margin-bottom: 1.5rem; }
+  .field { margin-bottom: 1.25rem; }
+  .field label { display: block; font-size: 13px; font-weight: 500; color: var(--text-muted); margin-bottom: 6px; }
+  .field input, .field select { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); font-size: 14px; font-family: inherit; color: var(--text); outline: none; transition: border-color 0.15s; }
+  .field input:focus, .field select:focus { border-color: var(--purple); }
+  .field input::placeholder { color: var(--text-hint); }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .error-msg { font-size: 12px; color: var(--red); margin-top: 4px; display: none; }
+  .info-box { background: var(--bg); border-radius: var(--radius-sm); padding: 12px 16px; font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 1.5rem; }
+  .info-box strong { color: var(--text); }
+  .btn { padding: 9px 20px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); font-size: 14px; font-weight: 500; color: var(--text); cursor: pointer; font-family: inherit; transition: background 0.15s, border-color 0.15s; }
+  .btn:hover { background: var(--bg); border-color: var(--border-hover); }
+  .btn:disabled { opacity: 0.35; cursor: default; }
+  .btn.primary { background: var(--purple); color: #fff; border-color: var(--purple); }
+  .btn.primary:hover { background: var(--purple-dark); border-color: var(--purple-dark); }
+  .btn-group { display: flex; gap: 8px; }
+  .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  .timer-wrap { display: flex; align-items: center; gap: 8px; }
+  .timer-icon { width: 16px; height: 16px; color: var(--text-muted); }
+  .timer-display { font-size: 22px; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .timer-display.warn { color: var(--amber); }
+  .timer-display.danger { color: #A32D2D; }
+  .tab-badge { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 99px; border: 1px solid var(--border); color: var(--text-muted); background: var(--surface); }
+  .tab-badge.flagged { background: var(--amber-light); border-color: #EF9F27; color: #633806; }
+  .progress-wrap { height: 3px; background: var(--border); border-radius: 2px; margin-bottom: 0.5rem; }
+  .progress-fill { height: 3px; border-radius: 2px; background: var(--purple); transition: width 0.4s ease; }
+  .step-label { font-size: 12px; color: var(--text-hint); margin-bottom: 1.5rem; }
+  .q-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1rem; }
+  .q-tag { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 99px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .q-text { font-size: 15px; line-height: 1.65; color: var(--text); margin-bottom: 1.25rem; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt { display: flex; align-items: flex-start; gap: 12px; padding: 11px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); cursor: pointer; text-align: left; font-size: 14px; color: var(--text); line-height: 1.55; font-family: inherit; transition: border-color 0.15s, background 0.15s; }
+  .opt:hover:not(:disabled) { border-color: var(--border-hover); background: var(--bg); }
+  .opt.selected { border-color: var(--purple); background: var(--purple-light); color: var(--purple-dark); }
+  .opt:disabled { cursor: default; }
+  .opt-letter { font-weight: 600; font-size: 12px; min-width: 18px; color: var(--text-hint); margin-top: 2px; flex-shrink: 0; }
+  .opt.selected .opt-letter { color: var(--purple); }
+  .nav-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 100; align-items: center; justify-content: center; padding: 1rem; }
+  .overlay.active { display: flex; }
+  .modal { background: var(--surface); border-radius: var(--radius); padding: 2rem; max-width: 400px; width: 100%; text-align: center; }
+  .modal-icon { font-size: 40px; margin-bottom: 12px; }
+  .modal h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
+  .modal p { font-size: 14px; color: var(--text-muted); line-height: 1.65; margin-bottom: 1.5rem; }
+  .modal-count { display: inline-block; font-size: 12px; font-weight: 500; background: var(--amber-light); color: #633806; padding: 4px 12px; border-radius: 99px; margin-bottom: 1rem; }
+  .done-icon { width: 56px; height: 56px; border-radius: 50%; background: var(--green-light); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; }
+  .done-icon svg { color: var(--green); }
+  @media (max-width: 480px) { .field-row { grid-template-columns: 1fr; } body { padding: 1rem 1rem 3rem; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="brand"><div class="brand-dot"></div><span class="brand-name">Evaluación técnica</span></div>
+
+  <!-- INTAKE -->
+  <div id="intake-view">
+    <div class="card">
+      <h2>Analista Sr. de Infraestructura Tecnológica</h2>
+      <p>Completa tus datos antes de comenzar. Tu información y resultados serán enviados al equipo evaluador al finalizar.</p>
+      <div class="field-row">
+        <div class="field"><label>Nombre *</label><input type="text" id="f-nombre" placeholder="Juan"><div class="error-msg" id="err-nombre">Campo requerido</div></div>
+        <div class="field"><label>Apellido *</label><input type="text" id="f-apellido" placeholder="Pérez"><div class="error-msg" id="err-apellido">Campo requerido</div></div>
+      </div>
+      <div class="field"><label>Correo electrónico *</label><input type="email" id="f-email" placeholder="correo@ejemplo.com"><div class="error-msg" id="err-email">Ingresa un correo válido</div></div>
+      <div class="field-row">
+        <div class="field"><label>Posición actual</label><input type="text" id="f-cargo" placeholder="Analista de infraestructura"></div>
+        <div class="field"><label>Años de experiencia</label>
+          <select id="f-exp"><option value="">Seleccionar</option><option>Menos de 2 años</option><option>2 – 4 años</option><option>5 – 7 años</option><option>8 – 10 años</option><option>Más de 10 años</option></select>
+        </div>
+      </div>
+      <div class="info-box"><strong>Condiciones del test</strong><br>10 preguntas · 20 minutos · Selección múltiple<br>Los cambios de pestaña quedan registrados y serán visibles en tu reporte.</div>
+      <button class="btn primary" id="btn-start" style="width:100%;padding:12px">Comenzar evaluación →</button>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz-view" style="display:none">
+    <div class="top-bar">
+      <div class="timer-wrap">
+        <svg class="timer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span class="timer-display" id="timer-display">20:00</span>
+      </div>
+      <div class="tab-badge" id="tab-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span id="tab-badge-text">Sin alertas</span>
+      </div>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="step-label" id="step-label">Pregunta 1 de 10</div>
+    <div class="q-card">
+      <span class="q-tag" id="q-tag"></span>
+      <p class="q-text" id="q-text"></p>
+      <div class="options" id="options"></div>
+    </div>
+    <div class="nav-row">
+      <button class="btn" id="btn-prev" disabled>← Anterior</button>
+      <div class="btn-group">
+        <button class="btn primary" id="btn-next" style="display:none">Siguiente →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DONE -->
+  <div id="done-view" style="display:none">
+    <div class="card" style="text-align:center;padding:3rem 2rem">
+      <div class="done-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2 style="font-size:20px;margin-bottom:10px">Evaluación completada</h2>
+      <p style="max-width:360px;margin:0 auto">Tus respuestas fueron enviadas al equipo evaluador. Nos pondremos en contacto contigo en los próximos días.<br><br>Puedes cerrar esta ventana.</p>
+    </div>
+  </div>
+</div>
+
+<!-- WARNING OVERLAY -->
+<div class="overlay" id="warning-overlay">
+  <div class="modal">
+    <div class="modal-icon">⚠️</div>
+    <h3>Saliste de esta pestaña</h3>
+    <div class="modal-count" id="modal-count">Cambio #1 detectado</div>
+    <p>El evaluador podrá ver cuántas veces saliste del test y por cuánto tiempo. Este comportamiento queda registrado en tu reporte.</p>
+    <button class="btn primary" id="btn-modal-ok" style="width:100%">Entendido, continuar</button>
+  </div>
+</div>
+
+<script>
+// ─── CONFIGURACIÓN ───────────────────────────────────────────────
+// Pega aquí la URL de tu Google Apps Script después de desplegarlo
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxwptEfGbs8kRLqWP4DmMXQ_0sww_yKOjDSzjvAj8pQgFFWetM13phSMaPh8DerFAuk/exec';
+// ─────────────────────────────────────────────────────────────────
+
+const TOTAL_SECONDS = 20 * 60;
+const questions = [
+  { cat:"Redes", color:"#185FA5", bg:"#E6F1FB", q:"Un servidor de producción responde en 800ms cuando debería hacerlo en 80ms. ¿Por dónde empiezas a diagnosticar?", opts:["Reinicio el servidor para ver si el problema persiste.","Reviso latencia de red con traceroute/ping, descarto saturación de NIC y reviso métricas de CPU/memoria antes de ir a la app.","Abro un ticket al proveedor de internet directamente.","Migro el servicio a otro servidor como medida inmediata."], answer:1 },
+  { cat:"Alta disponibilidad", color:"#0F6E56", bg:"#E1F5EE", q:"Te piden diseñar una arquitectura que soporte caída de un datacenter completo con RTO < 15 min. ¿Qué estrategia propones?", opts:["Backup diario en cinta con restauración manual.","Active-Active en dos DCs con balanceador global y replicación síncrona de datos críticos.","Cluster de failover en el mismo DC con IP flotante.","Aumentar los recursos del servidor principal para reducir el riesgo de caída."], answer:1 },
+  { cat:"Seguridad", color:"#993C1D", bg:"#FAECE7", q:"Detectas tráfico saliente inusual desde un servidor interno hacia una IP externa desconocida en el puerto 443. ¿Qué haces?", opts:["Bloqueo la IP en el firewall y listo.","Ignoro el tráfico si es cifrado; si no se puede leer, no hay riesgo.","Aislo el servidor de la red, capturo tráfico para análisis forense, escalo al equipo de seguridad y documento la línea de tiempo.","Apago el servidor de inmediato para contener el daño."], answer:2 },
+  { cat:"Cloud", color:"#534AB7", bg:"#EEEDFE", q:"La empresa quiere mover 200 VMs on-premise a la nube. ¿Cómo estructuras el proyecto?", opts:["Migro todas las VMs en un fin de semana usando lift-and-shift.","Propongo un assessment de dependencias, clasifico por criticidad, defino una estrategia por olas (wave planning) y valido cada ola en staging antes de producción.","Le digo al cliente que contrate directamente con el proveedor cloud sin intervención nuestra.","Solo migro las VMs de desarrollo; las de producción se quedan on-premise siempre."], answer:1 },
+  { cat:"Storage", color:"#854F0B", bg:"#FAEEDA", q:"Un volumen SAN al 85% de capacidad alimenta una base de datos crítica. ¿Qué acciones tomas y en qué orden?", opts:["Espero a que llegue al 95% para justificar el gasto ante gerencia.","Evalúo crecimiento histórico, proyecto la fecha de llenado, inicio un proceso de expansión o tiering, y configuro alertas en umbrales del 80% y 90%.","Borro logs y archivos temporales hasta bajar al 50%.","Formateo el volumen y restauro desde el último backup."], answer:1 },
+  { cat:"Automatización", color:"#3B6D11", bg:"#EAF3DE", q:"Te piden estandarizar el aprovisionamiento de 50 nuevos servidores Linux al mes. ¿Qué enfoque usas?", opts:["Instalo cada servidor manualmente para asegurar calidad.","Copio un servidor existente clonando el disco duro.","Implemento IaC con Ansible o Terraform, defino un pipeline en CI/CD y documento los roles para que cualquier miembro del equipo pueda ejecutarlo.","Creo un script Bash que corre en el servidor después de que alguien lo instala manualmente."], answer:2 },
+  { cat:"Incident management", color:"#993556", bg:"#FBEAF0", q:"Son las 2 AM y cae el sistema de pagos en producción. Eres el on-call. ¿Cuál es tu secuencia?", opts:["Despierto al CTO primero para que tome decisiones.","Intento arreglar el problema solo sin notificar a nadie para no alarmar.","Confirmo el impacto, activo el runbook, notifico al stakeholder designado, trabajo el diagnóstico en paralelo con el equipo, y comunico ETA cada 15–30 minutos.","Espero a las 8 AM para atender el incidente en horario laboral."], answer:2 },
+  { cat:"Monitoreo", color:"#185FA5", bg:"#E6F1FB", q:"¿Cuál es la diferencia entre monitorear disponibilidad y monitorear salud del servicio, y por qué importa?", opts:["Son lo mismo; si el servidor está encendido, el servicio está bien.","Disponibilidad mide si el proceso corre; salud mide si responde correctamente (latencia, error rate, throughput). Un servicio puede estar 'up' y ser completamente inútil.","La salud del servicio solo la puede medir el equipo de desarrollo.","Solo importa monitorear disponibilidad; lo demás es ruido."], answer:1 },
+  { cat:"Liderazgo técnico", color:"#3C3489", bg:"#EEEDFE", q:"Un colega junior implementó un cambio en producción sin change management y causó una caída de 2 horas. ¿Cómo lo manejas?", opts:["Lo reporto a RRHH inmediatamente para que sea sancionado.","No digo nada para no crear mal ambiente en el equipo.","Conduzco un post-mortem sin culpa, identifico la causa raíz del proceso fallido, refuerzo el procedimiento y busco mejoras para que el proceso sea más difícil de saltarse.","Le pido que no lo cuente y arreglo el problema yo solo."], answer:2 },
+  { cat:"Networking avanzado", color:"#0C447C", bg:"#E6F1FB", q:"¿Cuándo usarías BGP en una infraestructura empresarial y qué riesgos debes gestionar?", opts:["BGP solo es para ISPs; nunca se usa dentro de una empresa.","Cuando hay múltiples conexiones a internet o entre DCs propios y necesitas control de ruta granular. Los riesgos incluyen route leaks, flapping de sesiones y misconfiguraciones de AS path.","BGP se usa cuando el DNS falla como alternativa de routing.","Se usa para cifrar el tráfico entre oficinas."], answer:1 }
+];
+
+let candidate = {};
+let cur = 0, answers = new Array(questions.length).fill(null);
+let secondsLeft = TOTAL_SECONDS, timerRunning = true;
+let tabSwitches = 0, tabLog = [], totalTabTime = 0, tabOutAt = null;
+let timerInterval = null;
+let startTime = null;
+
+function fmt(s) { return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0'); }
+
+document.getElementById('btn-start').addEventListener('click', () => {
+  const nombre = document.getElementById('f-nombre').value.trim();
+  const apellido = document.getElementById('f-apellido').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  let valid = true;
+  if (!nombre) { document.getElementById('err-nombre').style.display='block'; valid=false; } else { document.getElementById('err-nombre').style.display='none'; }
+  if (!apellido) { document.getElementById('err-apellido').style.display='block'; valid=false; } else { document.getElementById('err-apellido').style.display='none'; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { document.getElementById('err-email').style.display='block'; valid=false; } else { document.getElementById('err-email').style.display='none'; }
+  if (!valid) return;
+  candidate = { nombre, apellido, email, cargo: document.getElementById('f-cargo').value.trim(), exp: document.getElementById('f-exp').value };
+  startTime = new Date();
+  document.getElementById('intake-view').style.display = 'none';
+  document.getElementById('quiz-view').style.display = 'block';
+  renderQuestion();
+  startTimer();
+});
+
+function startTimer() {
+  if (timerInterval) return;
+  timerInterval = setInterval(() => {
+    if (!timerRunning) return;
+    secondsLeft--;
+    const el = document.getElementById('timer-display');
+    el.textContent = fmt(secondsLeft);
+    el.className = 'timer-display' + (secondsLeft < 120 ? ' danger' : secondsLeft < 300 ? ' warn' : '');
+    if (secondsLeft <= 0) { clearInterval(timerInterval); submitResults(true); }
+  }, 1000);
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.getElementById('quiz-view').style.display === 'none') return;
+  if (document.hidden) {
+    tabOutAt = Date.now();
+  } else if (tabOutAt !== null) {
+    const elapsed = Math.round((Date.now() - tabOutAt) / 1000);
+    totalTabTime += elapsed;
+    tabOutAt = null;
+    tabSwitches++;
+    tabLog.push({ q: cur + 1, cat: questions[cur].cat, secs: elapsed });
+    document.getElementById('modal-count').textContent = 'Cambio #' + tabSwitches + ' detectado';
+    document.getElementById('warning-overlay').classList.add('active');
+    timerRunning = false;
+    updateTabBadge();
+  }
+});
+
+document.getElementById('btn-modal-ok').addEventListener('click', () => {
+  document.getElementById('warning-overlay').classList.remove('active');
+  timerRunning = true;
+});
+
+function updateTabBadge() {
+  const badge = document.getElementById('tab-badge');
+  const txt = document.getElementById('tab-badge-text');
+  if (tabSwitches > 0) {
+    badge.classList.add('flagged');
+    txt.textContent = tabSwitches + ' cambio' + (tabSwitches > 1 ? 's' : '') + ' detectado' + (tabSwitches > 1 ? 's' : '');
+  } else {
+    txt.textContent = 'Sin alertas';
+  }
+}
+
+function renderQuestion() {
+  const q = questions[cur];
+  const pct = Math.round((cur / questions.length) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('step-label').textContent = 'Pregunta ' + (cur+1) + ' de ' + questions.length;
+  document.getElementById('q-tag').textContent = q.cat;
+  document.getElementById('q-tag').style.background = q.bg;
+  document.getElementById('q-tag').style.color = q.color;
+  document.getElementById('q-text').textContent = q.q;
+  const optContainer = document.getElementById('options');
+  optContainer.innerHTML = '';
+  const chosen = answers[cur];
+  q.opts.forEach((o, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt' + (i === chosen ? ' selected' : '');
+    btn.innerHTML = '<span class="opt-letter">' + String.fromCharCode(65+i) + '</span><span>' + o + '</span>';
+    btn.addEventListener('click', () => { answers[cur] = i; renderQuestion(); });
+    optContainer.appendChild(btn);
+  });
+  document.getElementById('btn-prev').disabled = cur === 0;
+  const nextBtn = document.getElementById('btn-next');
+  if (chosen !== null) {
+    nextBtn.style.display = 'inline-block';
+    nextBtn.textContent = cur === questions.length - 1 ? 'Enviar evaluación →' : 'Siguiente →';
+  } else {
+    nextBtn.style.display = 'none';
+  }
+}
+
+document.getElementById('btn-prev').addEventListener('click', () => { cur--; renderQuestion(); });
+document.getElementById('btn-next').addEventListener('click', () => {
+  cur++;
+  if (cur >= questions.length) { submitResults(false); }
+  else { renderQuestion(); }
+});
+
+function submitResults(timedOut) {
+  clearInterval(timerInterval);
+  timerRunning = false;
+  const score = answers.filter((a,i) => a === questions[i].answer).length;
+  const timeUsed = TOTAL_SECONDS - secondsLeft;
+  const catScores = {};
+  questions.forEach((q,i) => {
+    if (!catScores[q.cat]) catScores[q.cat] = { c:0, t:0 };
+    catScores[q.cat].t++;
+    if (answers[i] === q.answer) catScores[q.cat].c++;
+  });
+  const payload = {
+    fecha: startTime ? startTime.toISOString() : new Date().toISOString(),
+    nombre: candidate.nombre,
+    apellido: candidate.apellido,
+    email: candidate.email,
+    cargo: candidate.cargo,
+    experiencia: candidate.exp,
+    puntaje: score,
+    total: questions.length,
+    porcentaje: Math.round((score / questions.length) * 100),
+    tiempo_usado: fmt(timeUsed),
+    tiempo_agotado: timedOut ? 'Sí' : 'No',
+    tab_switches: tabSwitches,
+    tab_tiempo_total: totalTabTime,
+    tab_log: JSON.stringify(tabLog),
+    respuestas: JSON.stringify(answers),
+    areas: JSON.stringify(catScores)
+  };
+  document.getElementById('quiz-view').style.display = 'none';
+  document.getElementById('done-view').style.display = 'block';
+  if (SCRIPT_URL !== 'PEGA_AQUI_TU_APPS_SCRIPT_URL') {
+    fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) }).catch(() => {});
+  }
+}
+</script>
+</body>
+</html>
