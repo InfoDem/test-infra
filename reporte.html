@@ -4,97 +4,98 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Reporte Evaluador — Analista Sr. de Infraestructura</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #f9f9f8; --surface: #ffffff; --border: #e5e4e0; --border-hover: #c8c7c2;
-    --text: #1a1a19; --text-muted: #6b6b68; --text-hint: #9e9e9b;
-    --purple: #534AB7; --purple-light: #EEEDFE; --purple-dark: #3C3489;
-    --green: #0F6E56; --green-light: #E1F5EE;
-    --red: #993C1D; --red-light: #FAECE7;
-    --amber: #BA7517; --amber-light: #FAEEDA;
-    --radius: 10px; --radius-sm: 6px;
-  }
-  body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem 4rem; }
-  .container { width: 100%; max-width: 720px; }
-  .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 2rem; }
-  .brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--purple); }
-  .brand-name { font-size: 13px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.04em; }
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; margin-bottom: 1rem; }
-  .btn { padding: 9px 20px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); font-size: 14px; font-weight: 500; color: var(--text); cursor: pointer; font-family: inherit; transition: background 0.15s; }
-  .btn:hover { background: var(--bg); }
-  .btn.primary { background: var(--purple); color: #fff; border-color: var(--purple); }
-  .btn.primary:hover { background: var(--purple-dark); }
-  .field { margin-bottom: 1.25rem; }
-  .field label { display: block; font-size: 13px; font-weight: 500; color: var(--text-muted); margin-bottom: 6px; }
-  .field input { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); font-size: 14px; font-family: inherit; color: var(--text); outline: none; }
-  .field input:focus { border-color: var(--purple); }
-  .error-msg { font-size: 12px; color: var(--red); margin-top: 6px; display: none; }
-  .section-label { font-size: 11px; font-weight: 500; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px; }
-  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 1rem; }
-  .stat { background: var(--bg); border-radius: var(--radius-sm); padding: 14px; text-align: center; }
-  .stat-val { font-size: 22px; font-weight: 600; }
-  .stat-val.ok { color: var(--green); }
-  .stat-val.warn { color: var(--amber); }
-  .stat-val.danger { color: #A32D2D; }
-  .stat-lbl { font-size: 11px; color: var(--text-hint); margin-top: 3px; }
-  .verdict-bar { padding: 14px 18px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; margin-bottom: 1rem; }
-  .verdict-high { background: var(--green-light); color: #085041; }
-  .verdict-mid { background: var(--amber-light); color: #633806; }
-  .verdict-low { background: var(--red-light); color: #712B13; }
-  .candidate-header { display: flex; align-items: center; gap: 14px; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); margin-bottom: 1.25rem; }
-  .avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--purple-light); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; color: var(--purple); flex-shrink: 0; }
-  .cand-name { font-size: 17px; font-weight: 600; }
-  .cand-meta { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
-  .cand-date { font-size: 11px; color: var(--text-hint); margin-top: 2px; }
-  .areas-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 1rem; }
-  .area-pill { background: var(--bg); border-radius: var(--radius-sm); padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; }
-  .area-name { font-size: 13px; color: var(--text-muted); }
-  .area-score { font-size: 14px; font-weight: 600; }
-  .alert-box { background: var(--amber-light); border: 1px solid #EF9F27; border-radius: var(--radius-sm); padding: 12px 16px; font-size: 13px; color: #633806; margin-bottom: 1rem; line-height: 1.6; }
-  .tab-item { display: flex; justify-content: space-between; font-size: 12px; padding: 7px 12px; background: var(--amber-light); border-radius: var(--radius-sm); margin-bottom: 4px; color: #633806; }
-  .resp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .resp-table th { text-align: left; font-size: 11px; font-weight: 500; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.06em; padding: 0 8px 8px; border-bottom: 1px solid var(--border); }
-  .resp-table td { padding: 10px 8px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
-  .resp-table tr:last-child td { border-bottom: none; }
-  .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 99px; }
-  .badge-ok { background: var(--green-light); color: #085041; }
-  .badge-nok { background: var(--red-light); color: #712B13; }
-  .loading { text-align: center; padding: 3rem; color: var(--text-muted); font-size: 14px; }
-  .empty { text-align: center; padding: 3rem; color: var(--text-muted); font-size: 14px; }
-  .record-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1rem; }
-  .record-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; cursor: pointer; }
-  .record-toggle { font-size: 18px; color: var(--text-hint); transition: transform 0.2s; }
-  .record-toggle.open { transform: rotate(180deg); }
-  .record-body { display: none; }
-  .record-body.open { display: block; }
-  .filter-bar { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
-  .filter-btn { padding: 6px 14px; border: 1px solid var(--border); border-radius: 99px; font-size: 12px; font-weight: 500; cursor: pointer; background: var(--surface); color: var(--text-muted); font-family: inherit; }
-  .filter-btn.active { background: var(--purple); color: #fff; border-color: var(--purple); }
-  .top-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
-  @media (max-width: 600px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } .areas-grid { grid-template-columns: 1fr 1fr; } body { padding: 1rem 1rem 3rem; } }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f9f9f8; --surface: #fff; --border: #e5e4e0; --border-hover: #c8c7c2;
+  --text: #1a1a19; --text-muted: #6b6b68; --text-hint: #9e9e9b;
+  --purple: #534AB7; --purple-light: #EEEDFE; --purple-dark: #3C3489;
+  --green: #0F6E56; --green-light: #E1F5EE;
+  --red: #993C1D; --red-light: #FAECE7;
+  --amber: #BA7517; --amber-light: #FAEEDA;
+  --radius: 10px; --radius-sm: 6px;
+}
+body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem 4rem; }
+.container { width: 100%; max-width: 780px; }
+.brand { display: flex; align-items: center; gap: 10px; margin-bottom: 2rem; }
+.brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--purple); }
+.brand-name { font-size: 13px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.04em; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; margin-bottom: 1rem; }
+.btn { padding: 9px 20px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); font-size: 14px; font-weight: 500; color: var(--text); cursor: pointer; font-family: inherit; transition: background 0.15s; }
+.btn:hover { background: var(--bg); }
+.btn.primary { background: var(--purple); color: #fff; border-color: var(--purple); }
+.btn.primary:hover { background: var(--purple-dark); }
+.field { margin-bottom: 1.25rem; }
+.field label { display: block; font-size: 13px; font-weight: 500; color: var(--text-muted); margin-bottom: 6px; }
+.field input { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); font-size: 14px; font-family: inherit; color: var(--text); outline: none; }
+.field input:focus { border-color: var(--purple); }
+.error-msg { font-size: 12px; color: var(--red); margin-top: 6px; display: none; }
+.section-label { font-size: 11px; font-weight: 600; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 1rem; }
+.stat { background: var(--bg); border-radius: var(--radius-sm); padding: 14px; text-align: center; }
+.stat-val { font-size: 22px; font-weight: 600; }
+.stat-val.ok { color: var(--green); }
+.stat-val.warn { color: var(--amber); }
+.stat-val.danger { color: #A32D2D; }
+.stat-lbl { font-size: 11px; color: var(--text-hint); margin-top: 3px; }
+.verdict-bar { padding: 14px 18px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; margin-bottom: 1rem; }
+.verdict-high { background: var(--green-light); color: #085041; }
+.verdict-mid { background: var(--amber-light); color: #633806; }
+.verdict-low { background: var(--red-light); color: #712B13; }
+.avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--purple-light); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; color: var(--purple); flex-shrink: 0; }
+.cand-name { font-size: 17px; font-weight: 600; }
+.cand-meta { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+.cand-date { font-size: 11px; color: var(--text-hint); margin-top: 2px; }
+.areas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 1rem; }
+.area-pill { background: var(--bg); border-radius: var(--radius-sm); padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; }
+.area-name { font-size: 12px; color: var(--text-muted); }
+.area-score { font-size: 14px; font-weight: 600; }
+.alert-box { background: var(--amber-light); border: 1px solid #EF9F27; border-radius: var(--radius-sm); padding: 12px 16px; font-size: 13px; color: #633806; margin-bottom: 1rem; line-height: 1.6; }
+.tab-item { display: flex; justify-content: space-between; font-size: 12px; padding: 7px 12px; background: var(--amber-light); border-radius: var(--radius-sm); margin-bottom: 4px; color: #633806; }
+.resp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.resp-table th { text-align: left; font-size: 11px; font-weight: 600; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.06em; padding: 0 10px 8px; border-bottom: 1px solid var(--border); }
+.resp-table td { padding: 10px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+.resp-table tr:last-child td { border-bottom: none; }
+.badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 99px; }
+.badge-ok { background: var(--green-light); color: #085041; }
+.badge-nok { background: var(--red-light); color: #712B13; }
+.badge-half { background: var(--amber-light); color: #633806; }
+.type-tag { font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 99px; display: inline-block; margin-bottom: 3px; }
+.tt-concept { background: var(--purple-light); color: var(--purple-dark); }
+.tt-config { background: #E6F1FB; color: #185FA5; }
+.tt-order { background: #EAF3DE; color: #3B6D11; }
+.tt-error { background: var(--red-light); color: var(--red); }
+
+.loading { text-align: center; padding: 3rem; color: var(--text-muted); font-size: 14px; }
+.empty { text-align: center; padding: 3rem; color: var(--text-muted); font-size: 14px; }
+.record-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1rem; }
+.record-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0; cursor: pointer; }
+.record-toggle { font-size: 18px; color: var(--text-hint); transition: transform 0.2s; margin-top: 4px; }
+.record-toggle.open { transform: rotate(180deg); }
+.record-body { display: none; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+.record-body.open { display: block; }
+.filter-bar { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
+.filter-btn { padding: 6px 14px; border: 1px solid var(--border); border-radius: 99px; font-size: 12px; font-weight: 500; cursor: pointer; background: var(--surface); color: var(--text-muted); font-family: inherit; }
+.filter-btn.active { background: var(--purple); color: #fff; border-color: var(--purple); }
+.top-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
+.sub-section { margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+@media (max-width: 600px) { .stats-grid { grid-template-columns: repeat(2,1fr); } .areas-grid { grid-template-columns: 1fr 1fr; } body { padding: 1rem 1rem 3rem; } }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="brand"><div class="brand-dot"></div><span class="brand-name">Panel evaluador</span></div>
 
-  <!-- LOGIN -->
   <div id="login-view">
     <div class="card" style="max-width:400px;margin:0 auto">
       <h2 style="font-size:17px;font-weight:600;margin-bottom:6px">Acceso evaluador</h2>
       <p style="font-size:13px;color:var(--text-muted);margin-bottom:1.5rem;line-height:1.6">Ingresa la contraseña para ver los reportes de los candidatos.</p>
-      <div class="field">
-        <label>Contraseña</label>
-        <input type="password" id="pw-input" placeholder="••••••••">
-        <div class="error-msg" id="pw-error">Contraseña incorrecta</div>
-      </div>
+      <div class="field"><label>Contraseña</label><input type="password" id="pw-input" placeholder="••••••••"><div class="error-msg" id="pw-error">Contraseña incorrecta</div></div>
       <button class="btn primary" id="btn-login" style="width:100%">Ingresar →</button>
     </div>
   </div>
 
-  <!-- DASHBOARD -->
   <div id="dashboard-view" style="display:none">
     <div class="top-actions">
       <div>
@@ -118,49 +119,30 @@
 </div>
 
 <script>
-// ─── CONFIGURACIÓN ───────────────────────────────────────────────
-const SCRIPT_URL   = 'https://script.google.com/macros/s/AKfycbxwptEfGbs8kRLqWP4DmMXQ_0sww_yKOjDSzjvAj8pQgFFWetM13phSMaPh8DerFAuk/exec';  // misma URL que en index.html
-const EVALUADOR_PW = 'Frm@9982**';  // cambia esta contraseña antes de publicar
-// ─────────────────────────────────────────────────────────────────
+const SCRIPT_URL   = 'PEGA_AQUI_TU_APPS_SCRIPT_URL';
+const EVALUADOR_PW = 'Frm@9982**';
 
-const questions = [
-  { cat:"Redes", opts:["Reinicio el servidor para ver si el problema persiste.","Reviso latencia de red con traceroute/ping, descarto saturación de NIC y reviso métricas de CPU/memoria antes de ir a la app.","Abro un ticket al proveedor de internet directamente.","Migro el servicio a otro servidor como medida inmediata."], answer:1 },
-  { cat:"Alta disponibilidad", opts:["Backup diario en cinta con restauración manual.","Active-Active en dos DCs con balanceador global y replicación síncrona de datos críticos.","Cluster de failover en el mismo DC con IP flotante.","Aumentar los recursos del servidor principal para reducir el riesgo de caída."], answer:1 },
-  { cat:"Seguridad", opts:["Bloqueo la IP en el firewall y listo.","Ignoro el tráfico si es cifrado; si no se puede leer, no hay riesgo.","Aislo el servidor de la red, capturo tráfico para análisis forense, escalo al equipo de seguridad y documento la línea de tiempo.","Apago el servidor de inmediato para contener el daño."], answer:2 },
-  { cat:"Cloud", opts:["Migro todas las VMs en un fin de semana usando lift-and-shift.","Propongo un assessment de dependencias, clasifico por criticidad, defino una estrategia por olas (wave planning) y valido cada ola en staging antes de producción.","Le digo al cliente que contrate directamente con el proveedor cloud sin intervención nuestra.","Solo migro las VMs de desarrollo; las de producción se quedan on-premise siempre."], answer:1 },
-  { cat:"Storage", opts:["Espero a que llegue al 95% para justificar el gasto ante gerencia.","Evalúo crecimiento histórico, proyecto la fecha de llenado, inicio un proceso de expansión o tiering, y configuro alertas en umbrales del 80% y 90%.","Borro logs y archivos temporales hasta bajar al 50%.","Formateo el volumen y restauro desde el último backup."], answer:1 },
-  { cat:"Automatización", opts:["Instalo cada servidor manualmente para asegurar calidad.","Copio un servidor existente clonando el disco duro.","Implemento IaC con Ansible o Terraform, defino un pipeline en CI/CD y documento los roles para que cualquier miembro del equipo pueda ejecutarlo.","Creo un script Bash que corre en el servidor después de que alguien lo instala manualmente."], answer:2 },
-  { cat:"Incident management", opts:["Despierto al CTO primero para que tome decisiones.","Intento arreglar el problema solo sin notificar a nadie para no alarmar.","Confirmo el impacto, activo el runbook, notifico al stakeholder designado, trabajo el diagnóstico en paralelo con el equipo, y comunico ETA cada 15–30 minutos.","Espero a las 8 AM para atender el incidente en horario laboral."], answer:2 },
-  { cat:"Monitoreo", opts:["Son lo mismo; si el servidor está encendido, el servicio está bien.","Disponibilidad mide si el proceso corre; salud mide si responde correctamente (latencia, error rate, throughput). Un servicio puede estar 'up' y ser completamente inútil.","La salud del servicio solo la puede medir el equipo de desarrollo.","Solo importa monitorear disponibilidad; lo demás es ruido."], answer:1 },
-  { cat:"Liderazgo técnico", opts:["Lo reporto a RRHH inmediatamente para que sea sancionado.","No digo nada para no crear mal ambiente en el equipo.","Conduzco un post-mortem sin culpa, identifico la causa raíz del proceso fallido, refuerzo el procedimiento y busco mejoras para que el proceso sea más difícil de saltarse.","Le pido que no lo cuente y arreglo el problema yo solo."], answer:2 },
-  { cat:"Networking avanzado", opts:["BGP solo es para ISPs; nunca se usa dentro de una empresa.","Cuando hay múltiples conexiones a internet o entre DCs propios y necesitas control de ruta granular. Los riesgos incluyen route leaks, flapping de sesiones y misconfiguraciones de AS path.","BGP se usa cuando el DNS falla como alternativa de routing.","Se usa para cifrar el tráfico entre oficinas."], answer:1 }
-];
+const typeLabels = { concept:'Conceptual', 'find-error':'Validar configuración', order:'Ordenar pasos', scenario:'Situación real' };
+const typeClasses = { concept:'tt-concept', 'find-error':'tt-config', order:'tt-order', scenario:'tt-scenario' };
 
 let allRecords = [];
 let activeFilter = 'all';
 
 document.getElementById('btn-login').addEventListener('click', doLogin);
-document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-
+document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key==='Enter') doLogin(); });
 function doLogin() {
-  const pw = document.getElementById('pw-input').value;
-  if (pw === EVALUADOR_PW) {
+  if (document.getElementById('pw-input').value === EVALUADOR_PW) {
     document.getElementById('login-view').style.display = 'none';
     document.getElementById('dashboard-view').style.display = 'block';
     loadRecords();
-  } else {
-    document.getElementById('pw-error').style.display = 'block';
-  }
+  } else { document.getElementById('pw-error').style.display = 'block'; }
 }
-
 document.getElementById('btn-logout').addEventListener('click', () => {
   document.getElementById('dashboard-view').style.display = 'none';
   document.getElementById('login-view').style.display = 'block';
   document.getElementById('pw-input').value = '';
 });
-
 document.getElementById('btn-refresh').addEventListener('click', loadRecords);
-
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -172,37 +154,31 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 
 function loadRecords() {
   document.getElementById('records-container').innerHTML = '<div class="loading">Cargando resultados...</div>';
-  if (SCRIPT_URL === 'PEGA_AQUI_TU_APPS_SCRIPT_URL') {
-    allRecords = [];
-    renderRecords();
-    return;
-  }
+  if (SCRIPT_URL === 'PEGA_AQUI_TU_APPS_SCRIPT_URL') { allRecords = []; renderRecords(); return; }
   fetch(SCRIPT_URL + '?action=get')
     .then(r => r.json())
     .then(data => { allRecords = data; renderRecords(); })
-    .catch(() => {
-      document.getElementById('records-container').innerHTML = '<div class="empty">No se pudo conectar con Google Sheets.<br>Verifica que la URL del script sea correcta.</div>';
-    });
+    .catch(() => { document.getElementById('records-container').innerHTML = '<div class="empty">No se pudo conectar con Google Sheets.<br>Verifica que la URL del script sea correcta.</div>'; });
 }
 
 function getVerdict(pct) {
-  if (pct >= 80) return { label: 'Perfil sólido', cls: 'verdict-high', filter: 'high' };
-  if (pct >= 60) return { label: 'Con potencial', cls: 'verdict-mid', filter: 'mid' };
-  return { label: 'Requiere desarrollo', cls: 'verdict-low', filter: 'low' };
+  if (pct >= 80) return { label:'Perfil sólido para el rol', cls:'verdict-high', filter:'high' };
+  if (pct >= 60) return { label:'Candidato con potencial', cls:'verdict-mid', filter:'mid' };
+  return { label:'Requiere mayor desarrollo', cls:'verdict-low', filter:'low' };
 }
 
 function renderRecords() {
   const container = document.getElementById('records-container');
   let filtered = allRecords;
-  if (activeFilter === 'high') filtered = allRecords.filter(r => r.porcentaje >= 80);
-  else if (activeFilter === 'mid') filtered = allRecords.filter(r => r.porcentaje >= 60 && r.porcentaje < 80);
-  else if (activeFilter === 'low') filtered = allRecords.filter(r => r.porcentaje < 60);
-  else if (activeFilter === 'flag') filtered = allRecords.filter(r => r.tab_switches > 0);
+  if (activeFilter === 'high') filtered = allRecords.filter(r => parseInt(r.porcentaje) >= 80);
+  else if (activeFilter === 'mid') filtered = allRecords.filter(r => parseInt(r.porcentaje) >= 60 && parseInt(r.porcentaje) < 80);
+  else if (activeFilter === 'low') filtered = allRecords.filter(r => parseInt(r.porcentaje) < 60);
+  else if (activeFilter === 'flag') filtered = allRecords.filter(r => parseInt(r.tab_switches) > 0);
 
-  document.getElementById('total-label').textContent = allRecords.length + ' candidato' + (allRecords.length !== 1 ? 's' : '') + ' evaluado' + (allRecords.length !== 1 ? 's' : '');
+  document.getElementById('total-label').textContent = allRecords.length + ' candidato' + (allRecords.length!==1?'s':'') + ' evaluado' + (allRecords.length!==1?'s':'');
 
   if (filtered.length === 0) {
-    container.innerHTML = '<div class="empty">' + (SCRIPT_URL === 'PEGA_AQUI_TU_APPS_SCRIPT_URL' ? 'Configura la URL del script en los archivos para ver resultados aquí.' : 'No hay candidatos en esta categoría.') + '</div>';
+    container.innerHTML = '<div class="empty">' + (SCRIPT_URL==='PEGA_AQUI_TU_APPS_SCRIPT_URL' ? 'Configura la URL del script para ver resultados.' : 'No hay candidatos en esta categoría.') + '</div>';
     return;
   }
 
@@ -212,13 +188,35 @@ function renderRecords() {
     const initials = ((r.nombre||'')[0]||'') + ((r.apellido||'')[0]||'');
     const tabs = parseInt(r.tab_switches) || 0;
     const tabTime = parseInt(r.tab_tiempo_total) || 0;
-    let areas = {};
-    try { areas = JSON.parse(r.areas || '{}'); } catch(e) {}
-    let resps = [];
-    try { resps = JSON.parse(r.respuestas || '[]'); } catch(e) {}
-    let tabLog = [];
-    try { tabLog = JSON.parse(r.tab_log || '[]'); } catch(e) {}
-    const fecha = r.fecha ? new Date(r.fecha).toLocaleDateString('es-DO', { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' }) : '—';
+    let areas = {}; try { areas = JSON.parse(r.areas||'{}'); } catch(e){}
+    let tabLog = []; try { tabLog = JSON.parse(r.tab_log||'[]'); } catch(e){}
+    let detail = []; try { detail = JSON.parse(r.detalle||'[]'); } catch(e){}
+    const fecha = r.fecha ? new Date(r.fecha).toLocaleDateString('es-DO',{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+
+    const areaRows = Object.entries(areas).map(([cat, s]) => {
+      const sc = s.score !== undefined ? s.score : s.c;
+      const tot = s.total !== undefined ? s.total : s.t;
+      const ratio = sc / tot;
+      const color = ratio >= 1 ? 'var(--green)' : ratio === 0 ? 'var(--red)' : 'var(--amber)';
+      return `<div class="area-pill"><span class="area-name">${cat}</span><span class="area-score" style="color:${color}">${parseFloat(sc).toFixed(1)}/${tot}</span></div>`;
+    }).join('');
+
+    const detailRows = detail.map((d, i) => {
+      const sc = parseFloat(d.score);
+      const badgeCls = sc >= 1 ? 'badge-ok' : sc >= 0.5 ? 'badge-half' : 'badge-nok';
+      const badgeTxt = sc >= 1 ? '✓ Correcto' : sc >= 0.5 ? '½ Parcial' : '✗ Incorrecto';
+      const answerHtml = d.type === 'order'
+        ? `<div style="font-size:12px;color:var(--text-hint);margin-top:4px">Orden enviado — ${sc >= 1 ? 'correcto' : sc >= 0.5 ? 'parcialmente correcto' : 'incorrecto'}</div>`
+        : '';
+      return `<tr>
+        <td>
+          <div class="type-tag ${typeClasses[d.type]||'tt-concept'}">${typeLabels[d.type]||d.type}</div>
+          <div style="color:var(--text-muted);font-size:12px">${d.cat}</div>
+        </td>
+        <td>${answerHtml}</td>
+        <td style="text-align:center"><span class="badge ${badgeCls}">${badgeTxt}</span></td>
+      </tr>`;
+    }).join('');
 
     return `<div class="record-card">
       <div class="record-header" onclick="toggleRecord(${idx})">
@@ -226,7 +224,7 @@ function renderRecords() {
           <div class="avatar">${initials.toUpperCase()}</div>
           <div>
             <div class="cand-name">${r.nombre} ${r.apellido}</div>
-            <div class="cand-meta">${r.email}${r.cargo ? ' · ' + r.cargo : ''}${r.experiencia ? ' · ' + r.experiencia : ''}</div>
+            <div class="cand-meta">${r.email}${r.cargo?' · '+r.cargo:''}${r.experiencia?' · '+r.experiencia:''}</div>
             <div class="cand-date">${fecha}</div>
           </div>
         </div>
@@ -239,43 +237,25 @@ function renderRecords() {
         </div>
       </div>
       <div class="record-body" id="body-${idx}">
-        <div class="verdict-bar ${verdict.cls}" style="margin-bottom:1rem">${verdict.label} · ${pct}% de respuestas correctas</div>
-        <div class="stats-grid" style="margin-bottom:1rem">
-          <div class="stat"><div class="stat-val">${r.tiempo_usado || '—'}</div><div class="stat-lbl">Tiempo usado</div></div>
-          <div class="stat"><div class="stat-val ${tabs > 2 ? 'danger' : tabs > 0 ? 'warn' : 'ok'}">${tabs}</div><div class="stat-lbl">Cambios pestaña</div></div>
-          <div class="stat"><div class="stat-val ${tabTime > 60 ? 'danger' : tabTime > 0 ? 'warn' : 'ok'}">${tabTime}s</div><div class="stat-lbl">Seg. fuera</div></div>
-          <div class="stat"><div class="stat-val ${r.tiempo_agotado === 'Sí' ? 'danger' : 'ok'}">${r.tiempo_agotado === 'Sí' ? 'Sí' : 'No'}</div><div class="stat-lbl">Tiempo agotado</div></div>
+        <div class="verdict-bar ${verdict.cls}">${verdict.label} · ${pct}% de efectividad</div>
+        <div class="stats-grid">
+          <div class="stat"><div class="stat-val">${r.tiempo_usado||'—'}</div><div class="stat-lbl">Tiempo usado</div></div>
+          <div class="stat"><div class="stat-val ${tabs>2?'danger':tabs>0?'warn':'ok'}">${tabs}</div><div class="stat-lbl">Cambios pestaña</div></div>
+          <div class="stat"><div class="stat-val ${tabTime>60?'danger':tabTime>0?'warn':'ok'}">${tabTime}s</div><div class="stat-lbl">Seg. fuera</div></div>
+          <div class="stat"><div class="stat-val ${r.tiempo_agotado==='Sí'?'danger':'ok'}">${r.tiempo_agotado==='Sí'?'Sí':'No'}</div><div class="stat-lbl">Tiempo agotado</div></div>
         </div>
-        ${tabs > 0 ? `<div class="alert-box" style="margin-bottom:1rem">⚠️ <strong>Actividad fuera del test.</strong> El candidato salió de la pestaña ${tabs} vez${tabs > 1 ? 'es' : ''} por ~${tabTime}s en total.${tabLog.length > 0 ? '<div style="margin-top:8px">' + tabLog.map(e => `<div class="tab-item"><span>Pregunta ${e.q} — ${e.cat}</span><span>${e.secs}s fuera</span></div>`).join('') + '</div>' : ''}</div>` : ''}
-        <div class="section-label" style="margin-bottom:8px">Resultado por área</div>
-        <div class="areas-grid" style="margin-bottom:1rem">
-          ${Object.entries(areas).map(([cat, s]) => {
-            const sc = s.c === s.t ? '#0F6E56' : s.c === 0 ? '#993C1D' : 'var(--text)';
-            return `<div class="area-pill"><span class="area-name">${cat}</span><span class="area-score" style="color:${sc}">${s.c}/${s.t}</span></div>`;
-          }).join('')}
-        </div>
-        ${resps.length > 0 ? `<div class="section-label" style="margin-bottom:8px">Respuestas detalladas</div>
-        <table class="resp-table">
-          <thead><tr><th style="width:30%">Área</th><th>Respondió</th><th style="width:70px;text-align:center">Resultado</th></tr></thead>
-          <tbody>${questions.map((q, i) => {
-            const chosen = resps[i];
-            const isCorrect = chosen === q.answer;
-            const chosenText = chosen !== null && chosen !== undefined ? String.fromCharCode(65 + chosen) + '. ' + q.opts[chosen] : 'Sin respuesta';
-            return `<tr>
-              <td style="color:var(--text-muted)">${q.cat}</td>
-              <td>${chosenText}</td>
-              <td style="text-align:center"><span class="badge ${isCorrect ? 'badge-ok' : 'badge-nok'}">${isCorrect ? '✓' : '✗'}</span></td>
-            </tr>`;
-          }).join('')}</tbody>
-        </table>` : ''}
+        ${tabs>0?`<div class="alert-box">⚠️ <strong>Actividad fuera del test.</strong> ${tabs} cambio${tabs>1?'s':''} de pestaña — ~${tabTime}s fuera en total.${tabLog.length>0?'<div style="margin-top:8px">'+tabLog.map(e=>`<div class="tab-item"><span>P${e.q} — ${e.cat} (${e.type})</span><span>${e.secs}s fuera</span></div>`).join('')+'</div>':''}</div>`:''}
+        <div class="section-label">Resultado por área</div>
+        <div class="areas-grid">${areaRows}</div>
+        ${detailRows?`<div class="sub-section"><div class="section-label" style="margin-bottom:10px">Detalle de respuestas</div><table class="resp-table"><thead><tr><th style="width:28%">Tipo / Área</th><th>Respuesta del candidato</th><th style="width:100px;text-align:center">Resultado</th></tr></thead><tbody>${detailRows}</tbody></table></div>`:''}
       </div>
     </div>`;
   }).join('');
 }
 
 function toggleRecord(idx) {
-  const body = document.getElementById('body-' + idx);
-  const toggle = document.getElementById('toggle-' + idx);
+  const body = document.getElementById('body-'+idx);
+  const toggle = document.getElementById('toggle-'+idx);
   const isOpen = body.classList.contains('open');
   body.classList.toggle('open', !isOpen);
   toggle.classList.toggle('open', !isOpen);
